@@ -1039,6 +1039,72 @@ describe('autoComplete directive', function() {
         });
     });
 
+    describe('select-second-match option', function() {
+        it('initializes the option to false', function() {
+            // Arrange/Act
+            compile();
+
+            // Assert
+            expect(isolateScope.options.selectSecondMatch).toBe(false);
+        });
+
+        it('selects the second suggestion after the suggestion box is shown if the option is true', function() {
+            // Arrange
+            compile('select-second-match="true"');
+
+            //Act
+            loadSuggestions(3);
+
+            // Assert
+            expect(getSuggestion(0)).not.toHaveClass('selected');
+            expect(getSuggestion(1)).toHaveClass('selected');
+            expect(getSuggestion(2)).not.toHaveClass('selected');
+
+        });
+
+        it('selects the second suggestion even if the select-first-match is set to true (override behaviour)', function() {
+            // Arrange
+            compile('select-first-match="true" select-second-match="true"');
+
+            //Act
+            loadSuggestions(3);
+
+            // Assert
+            expect(getSuggestion(0)).not.toHaveClass('selected');
+            expect(getSuggestion(1)).toHaveClass('selected');
+            expect(getSuggestion(2)).not.toHaveClass('selected');
+
+        });
+
+        it('doesn\'t select any suggestion after the suggestion box is shown if the option is false and select-first-match is also false', function() {
+            // Arrange
+            compile('select-first-match="false" select-second-match="false"');
+
+            //Act
+            loadSuggestions(3);
+
+            // Assert
+            expect(getSuggestion(0)).not.toHaveClass('selected');
+            expect(getSuggestion(1)).not.toHaveClass('selected');
+            expect(getSuggestion(2)).not.toHaveClass('selected');
+
+        });
+
+        it('doesn\'t override the select-first-match behaviour if select-second-match is set to false', function() {
+            // Arrange
+            compile('select-first-match="true" select-second-match="false"');
+
+            //Act
+            loadSuggestions(3);
+
+            // Assert
+            expect(getSuggestion(0)).toHaveClass('selected');
+            expect(getSuggestion(1)).not.toHaveClass('selected');
+            expect(getSuggestion(2)).not.toHaveClass('selected');
+
+        });
+    });
+
     describe('display-property option', function() {
         it('initializes the option to an empty string', function() {
             // Arrange/Act

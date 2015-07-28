@@ -26,7 +26,8 @@
  * @param {boolean=} [loadOnFocus=false] Flag indicating that the source option will be evaluated when the input element
  *    gains focus. The current input value is available as $query.
  * @param {boolean=} [selectFirstMatch=true] Flag indicating that the first match will be automatically selected once
- *    the suggestion list is shown.
+ * @param {boolean=} [selectSecondMatch=false] Flag indicating that the second match will be automatically selected once
+ *    the suggestion list is shown. Overrides selectFirstMatch.
  */
 tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tagsInputConfig, tiUtil) {
     function SuggestionList(loadFn, options, events) {
@@ -58,11 +59,16 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
             self.query = null;
         };
         self.show = function() {
-            if (options.selectFirstMatch) {
-                self.select(0);
+            if (options.selectSecondMatch) {
+                self.select(1);
             }
             else {
-                self.selected = null;
+                if (options.selectFirstMatch) {
+                    self.select(0);
+                }
+                else {
+                    self.selected = null;
+                }
             }
             self.visible = true;
         };
@@ -147,6 +153,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                 loadOnEmpty: [Boolean, false],
                 loadOnFocus: [Boolean, false],
                 selectFirstMatch: [Boolean, true],
+                selectSecondMatch: [Boolean, false],
                 displayProperty: [String, '']
             });
 

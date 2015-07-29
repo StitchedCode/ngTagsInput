@@ -46,6 +46,7 @@
  * @param {expression=} [onTagRemoved=NA] Expression to evaluate upon removing an existing tag. The removed tag is
  *    available as $tag.
  * @param {expression=} [onTagClicked=NA] Expression to evaluate upon clicking an existing tag. The clicked tag is available as $tag.
+ * @param {boolean=} [selectTagOnClick=false] Flag indicating that clicking a tag causes it to be selected. This runs after any onTagClicked function
  */
 tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInputConfig, tiUtil) {
     function TagList(options, events, onTagAdding, onTagRemoving) {
@@ -189,7 +190,8 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 keyProperty: [String, ''],
                 allowLeftoverText: [Boolean, false],
                 addFromAutocompleteOnly: [Boolean, false],
-                spellcheck: [Boolean, true]
+                spellcheck: [Boolean, true],
+                selectTagOnClick: [Boolean, false]
             });
 
             $scope.tagList = new TagList($scope.options, $scope.events,
@@ -346,7 +348,12 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 .on('tag-added', scope.onTagAdded)
                 .on('invalid-tag', scope.onInvalidTag)
                 .on('tag-removed', scope.onTagRemoved)
-                .on('tag-clicked', scope.onTagClicked)
+                .on('tag-clicked', function(args){
+                    scope.onTagClicked(args);
+                    if(options.selectTagOnClick){
+                        tagList.select(tagList.items.indexOf(args.$tag));
+                    }
+                })
                 .on('tag-added', function() {
                     scope.newTag.text('');
                 })

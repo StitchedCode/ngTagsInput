@@ -1788,6 +1788,34 @@ describe('tags-input directive', function() {
             // Assert
             expect($scope.callback).not.toHaveBeenCalled();
         });
+
+        it('if selectTagOnClick is set, selects the tag', function() {
+            // Arrange
+            $scope.tags = generateTags(3);
+            $scope.callback = jasmine.createSpy();
+            compile('select-tag-on-click="true"');
+
+            // Act
+            getTag(1).click();
+
+            // Assert
+            expect(isolateScope.tagList.selected).toBe($scope.tags[1]);
+
+        });
+
+        it('if selectTagOnClick is set, also runs the provided callback for onTagClicked', function() {
+            // Arrange
+            $scope.tags = generateTags(3);
+            $scope.callback = jasmine.createSpy();
+            compile('on-tag-clicked="callback($tag)" select-tag-on-click="true"');
+
+            // Act
+            getTag(1).click();
+
+            // Assert
+            expect($scope.callback).toHaveBeenCalledWith({ text: 'Tag2' });
+            expect(isolateScope.tagList.selected).toBe($scope.tags[1]);
+        });
     });
 
     describe('ng-disabled support', function () {

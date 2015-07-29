@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2015 Michael Benford
  * License: MIT
  *
- * Generated at 2015-07-28 18:30:44 +0100
+ * Generated at 2015-07-29 11:28:58 +0100
  */
 (function() {
 'use strict';
@@ -75,6 +75,7 @@ var tagsInput = angular.module('ngTagsInput', []);
  * @param {expression=} [onTagRemoved=NA] Expression to evaluate upon removing an existing tag. The removed tag is
  *    available as $tag.
  * @param {expression=} [onTagClicked=NA] Expression to evaluate upon clicking an existing tag. The clicked tag is available as $tag.
+ * @param {boolean=} [selectTagOnClick=false] Flag indicating that clicking a tag causes it to be selected. This runs after any onTagClicked function
  */
 tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInputConfig", "tiUtil", function($timeout, $document, $window, tagsInputConfig, tiUtil) {
     function TagList(options, events, onTagAdding, onTagRemoving) {
@@ -218,7 +219,8 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                 keyProperty: [String, ''],
                 allowLeftoverText: [Boolean, false],
                 addFromAutocompleteOnly: [Boolean, false],
-                spellcheck: [Boolean, true]
+                spellcheck: [Boolean, true],
+                selectTagOnClick: [Boolean, false]
             });
 
             $scope.tagList = new TagList($scope.options, $scope.events,
@@ -375,7 +377,12 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                 .on('tag-added', scope.onTagAdded)
                 .on('invalid-tag', scope.onInvalidTag)
                 .on('tag-removed', scope.onTagRemoved)
-                .on('tag-clicked', scope.onTagClicked)
+                .on('tag-clicked', function(args){
+                    scope.onTagClicked(args);
+                    if(options.selectTagOnClick){
+                        tagList.select(tagList.items.indexOf(args.$tag));
+                    }
+                })
                 .on('tag-added', function() {
                     scope.newTag.text('');
                 })

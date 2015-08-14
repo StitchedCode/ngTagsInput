@@ -1,11 +1,11 @@
 /*!
- * ngTagsInput v3.0.0
+ * ngTagsInput v3.0.0-stitched.1
  * http://mbenford.github.io/ngTagsInput
  *
  * Copyright (c) 2013-2015 Michael Benford
  * License: MIT
  *
- * Generated at 2015-07-29 11:28:58 +0100
+ * Generated at 2015-08-14 01:14:59 +0100
  */
 (function() {
 'use strict';
@@ -74,6 +74,7 @@ var tagsInput = angular.module('ngTagsInput', []);
  *    is available as $tag. This method must return either true or false. If false, the tag will not be removed.
  * @param {expression=} [onTagRemoved=NA] Expression to evaluate upon removing an existing tag. The removed tag is
  *    available as $tag.
+ * @param {expression=} [onNgBlur=NA] Expression to evaluate upon input blur. Equivalent to ng-blur but on the input, not the parent
  * @param {expression=} [onTagClicked=NA] Expression to evaluate upon clicking an existing tag. The clicked tag is available as $tag.
  * @param {boolean=} [selectTagOnClick=false] Flag indicating that clicking a tag causes it to be selected. This runs after any onTagClicked function
  */
@@ -188,6 +189,7 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
             onInvalidTag: '&',
             onTagRemoving: '&',
             onTagRemoved: '&',
+            onNgBlur: '&',
             onTagClicked: '&'
         },
         replace: false,
@@ -413,6 +415,7 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                     if (options.addOnBlur && !options.addFromAutocompleteOnly) {
                         tagList.addText(scope.newTag.text());
                     }
+                    scope.onNgBlur();
                     element.triggerHandler('blur');
                     setElementValidity();
                 })

@@ -45,6 +45,7 @@
  *    is available as $tag. This method must return either true or false. If false, the tag will not be removed.
  * @param {expression=} [onTagRemoved=NA] Expression to evaluate upon removing an existing tag. The removed tag is
  *    available as $tag.
+ * @param {expression=} [onNgBlur=NA] Expression to evaluate upon input blur. Equivalent to ng-blur but on the input, not the parent
  * @param {expression=} [onTagClicked=NA] Expression to evaluate upon clicking an existing tag. The clicked tag is available as $tag.
  * @param {boolean=} [selectTagOnClick=false] Flag indicating that clicking a tag causes it to be selected. This runs after any onTagClicked function
  */
@@ -159,6 +160,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
             onInvalidTag: '&',
             onTagRemoving: '&',
             onTagRemoved: '&',
+            onNgBlur: '&',
             onTagClicked: '&'
         },
         replace: false,
@@ -384,6 +386,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                     if (options.addOnBlur && !options.addFromAutocompleteOnly) {
                         tagList.addText(scope.newTag.text());
                     }
+                    scope.onNgBlur();
                     element.triggerHandler('blur');
                     setElementValidity();
                 })

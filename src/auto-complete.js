@@ -28,6 +28,7 @@
  * @param {boolean=} [selectFirstMatch=true] Flag indicating that the first match will be automatically selected once
  * @param {boolean=} [selectSecondMatch=false] Flag indicating that the second match will be automatically selected once
  *    the suggestion list is shown. Overrides selectFirstMatch.
+* @param {boolean=} [captiveScroll=false] Flag indicating that the suggestion lists scroll events will not bubble to the parent
  */
 tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tagsInputConfig, tiUtil) {
     function SuggestionList(loadFn, options, events) {
@@ -154,7 +155,8 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                 loadOnFocus: [Boolean, false],
                 selectFirstMatch: [Boolean, true],
                 selectSecondMatch: [Boolean, false],
-                displayProperty: [String, '']
+                displayProperty: [String, ''],
+                captiveScroll: [Boolean, false]
             });
 
             $scope.suggestionList = new SuggestionList($scope.source, $scope.options, $scope.events);
@@ -266,6 +268,24 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
 
             events.on('suggestion-selected', function(index) {
                 scrollToElement(element, index);
+            });
+
+            // bind the listener to the parent, the suggestion list doesn't appear instantly / is replace on successive queries?
+            element.on('wheel', function (e) {
+                // operate on the list itself, though
+                var list = element.find('ul.suggestion-list');
+                if(
+                    list && scope.options.captiveScroll &&
+                    ((
+                        list.scrollTop() === (list.get(0).scrollHeight - list.height()) &&
+                        e.originalEvent.deltaY > 0
+                    ) || (
+                        list.scrollTop() === 0 &&
+                        e.originalEvent.deltaY < 0
+                    ))
+                ){
+                  e.preventDefault();
+                }
             });
         }
     };

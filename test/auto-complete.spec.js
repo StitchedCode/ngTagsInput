@@ -1105,6 +1105,21 @@ describe('autoComplete directive', function() {
         });
     });
 
+    /*describe('captive-scroll', function() {
+        it('does not prevent scroll on default:false', function() {
+            // Arrange
+            compile('captive-scroll="true" select-second-match="false"');
+
+            // Act
+            // wheelEvent?
+            // unsure how to do this
+
+            // Assert
+            // expect(wheelEvent.isPropagationStopped()).toBe(false);
+
+        });
+    });*/
+
     describe('display-property option', function() {
         it('initializes the option to an empty string', function() {
             // Arrange/Act

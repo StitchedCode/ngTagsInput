@@ -1,11 +1,11 @@
 /*!
- * ngTagsInput v3.0.0-stitched.2
+ * ngTagsInput v3.0.0-stitched.3
  * http://mbenford.github.io/ngTagsInput
  *
  * Copyright (c) 2013-2015 Michael Benford
  * License: MIT
  *
- * Generated at 2015-10-29 10:58:40 +0000
+ * Generated at 2015-10-29 11:00:06 +0000
  */
 (function() {
 'use strict';

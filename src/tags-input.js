@@ -94,7 +94,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
 
                 self.clearCurrent();
                 self.items.push(tag);
-                self.setCurrent(self.items.length);
+                self.setCurrent(self.items.length-1);
 
                 events.trigger('tag-added', { $tag: tag });
             }

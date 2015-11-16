@@ -91,7 +91,11 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
             setTagText(tag, tagText);
 
             if (tagIsValid(tag)) {
+
+                self.clearCurrent();
                 self.items.push(tag);
+                self.setCurrent(self.items.length);
+
                 events.trigger('tag-added', { $tag: tag });
             }
             else if (tagText) {
@@ -122,6 +126,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
 
             self.index = index;
             self.selected = self.items[index];
+
+            self.clearCurrent();
+            self.setCurrent(index);
         };
 
         self.selectPrior = function() {
@@ -146,6 +153,18 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
         };
 
         self.clearSelection();
+
+        self.clearCurrent = function(){
+            for(var i=0; i< self.items.length; i++){
+                self.items[i]._current = false;
+            }
+        };
+
+        self.setCurrent = function(index){
+            if(index && self.items[index]){
+                self.items[index]._current = true;
+            }
+        };
 
         return self;
     }

@@ -161,7 +161,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
         };
 
         self.setCurrent = function(index){
-            if(index && self.items[index]){
+            if( !(!index && index !==0) && self.items[index]){
                 self.items[index]._current = true;
             }
         };

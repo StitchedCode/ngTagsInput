@@ -383,6 +383,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 })
                 .on('tag-added', function() {
                     scope.newTag.text('');
+                    tagList.clearCurrent();
+                    tagList.clearSelection();
+                    tagList.setCurrent(tagList.items.length-1);
                 })
                 .on('tag-added tag-removed', function() {
                     scope.tags = tagList.items;
@@ -390,6 +393,10 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                     // automatically, but since the model is an array, $setViewValue does nothing and it's up to us to do it.
                     // Unfortunately this won't trigger any registered $parser and there's no safe way to do it.
                     ngModelCtrl.$setDirty();
+                    tagList.clearCurrent();
+                    tagList.clearSelection();
+                    tagList.setCurrent(tagList.items.length-1);
+
                 })
                 .on('invalid-tag', function() {
                     scope.newTag.invalid = true;
@@ -406,6 +413,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 .on('input-focus', function() {
                     element.triggerHandler('focus');
                     ngModelCtrl.$setValidity('leftoverText', true);
+                    tagList.clearCurrent();
+                    tagList.clearSelection();
+                    tagList.setCurrent(tagList.items.length-1);
                 })
                 .on('input-blur', function() {
                     if (options.addOnBlur && !options.addFromAutocompleteOnly) {
@@ -413,6 +423,8 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                     }
                     scope.onNgBlur();
                     element.triggerHandler('blur');
+                    tagList.clearCurrent();
+                    tagList.clearSelection();
                     setElementValidity();
                 })
                 .on('input-keydown', function(event) {
